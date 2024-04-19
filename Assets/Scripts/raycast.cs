@@ -30,67 +30,67 @@ public class raycast : MonoBehaviour
 
     void Update()
     {
+        SwitchItems();
         Ray playerRay = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
         if (Physics.Raycast(playerRay, out hit, 100))
         {
-           if (Input.GetKey(KeyCode.Mouse0))
+            goldAmount.text = hit.collider.gameObject.name;
+            if (Input.GetKey(KeyCode.Mouse0))
             {
-                Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject.CompareTag("gold"))
                 {
                     Destroy(hit.transform.parent.gameObject);
                     gold += 18;
+                    goldAmount.text = gold.ToString();
                 }
-
                 else if (hit.collider.gameObject.CompareTag("KnifeCabinet"))
                 {
                     Destroy(hit.collider.gameObject);
                     hasKnife = true;
                 }
-
                 else if (hit.collider.gameObject.CompareTag("KeyCabinet"))
                 {
                     Destroy(hit.collider.gameObject);
                     hasKey = true;
                 }
-
-               
                 else if (hit.collider.gameObject.CompareTag("Enemy") && playerKnife.activeInHierarchy)
                 {
                     Destroy(hit.collider.gameObject);
                 }
-                
-                
-            }
-
-            if (Input.GetKey(KeyCode.Alpha1))
-            {
-                inventoryIndex = 1;
-            }
-
-            if (Input.GetKey(KeyCode.Alpha2))
-            {
-                inventoryIndex = 2;
-            }
-
-            if (inventoryIndex == 2 && hasKnife)
-            {
-                playerKnife.SetActive(true);
-                playerKey.SetActive(false);
-                knifeImage.SetActive(true);
-                keyImage.SetActive(false);
-            }
-
-            if (inventoryIndex == 1 && hasKey)
-            {
-                playerKey.SetActive(true);
-                playerKnife.SetActive(false);
-                keyImage.SetActive(true);
-                knifeImage.SetActive(false);
-            }
+            } 
         }
-        goldAmount.text = gold.ToString();
+        else
+        {
+            goldAmount.text = "_";
+        }
+    }
+
+    private void SwitchItems()
+    {
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            inventoryIndex = 1;
+        }
+
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            inventoryIndex = 2;
+        }
+        if (inventoryIndex == 2 && hasKnife)
+        {
+            playerKnife.SetActive(true);
+            playerKey.SetActive(false);
+            knifeImage.SetActive(true);
+            keyImage.SetActive(false);
+        }
+        if (inventoryIndex == 1 && hasKey)
+        {
+            playerKey.SetActive(true);
+            playerKnife.SetActive(false);
+            keyImage.SetActive(true);
+            knifeImage.SetActive(false);
+        }
     }
 }
